@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ProgramController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,17 +15,50 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Prak 1
-Route::get('/', function () {
-    echo "Selamat datang";
+// 1 - Route biasa Home
+Route::get('/', function(){
+    return redirect('https://www.educastudio.com/');
 });
 
-// Prak 1
-Route::get('/about', function () {
-    echo "1941720070 - I Made Genadi Dharma Slawa ";
+// 2. Route Prefix Category
+Route::prefix('/category')->group(function(){
+    Route::get('/marbel-edu-games', function(){
+        return redirect('https://www.educastudio.com/category/marbel-edu-games');
+    });
+
+    Route::get('/riri-story-books', function(){
+        return redirect('https://www.educastudio.com/category/riri-story-books');
+    });
+
+    Route::get('/kolak-kids-songs', function(){
+        return redirect('https://www.educastudio.com/category/kolak-kids-songs');
+    });
 });
 
-// Prak 1
-Route::get('/articles/{id}', function ($id) {
-    echo "Halaman artikel dengan ID: " . $id;
+// 3. Route Param News
+Route::get('news', function(){
+    return redirect('https://www.educastudio.com/news');
 });
+
+Route::get('news/{title}', function($title){
+    return redirect('https://www.educastudio.com/news/' . $title);
+});
+
+// 4. Route Prefix Program
+Route::prefix('/program')->group(function(){
+    Route::get('/karir', [ProgramController::class, 'karir']);
+
+    Route::get('/magang', [ProgramController::class, 'magang']);
+
+    Route::get('/kunjungan-industri', [ProgramController::class, 'kunjunganIndustri']);
+});
+
+// 5 - Route biasa About Us
+Route::get('/about-us', function(){
+    return redirect('https://www.educastudio.com/about-us');
+});
+
+// 6 - Route Resource Contact
+Route::resource('/contact-us', ContactController::class, [
+    'only' => ['index', 'create', 'store']
+]);
